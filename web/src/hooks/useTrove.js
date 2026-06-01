@@ -9,6 +9,7 @@ export function useTrove() {
   const [bookmarks, setBookmarks] = useState([]);
   const [loadError, setLoadError] = useState(null);
   const [toast, setToast] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
   const [linkCheck, setLinkCheck] = useState({ checking: false, checked: false, lastChecked: null });
 
   const flash = useCallback((msg, icon) => {
@@ -29,6 +30,24 @@ export function useTrove() {
       .catch((err) => !cancelled && setLoadError(err.message));
     return () => { cancelled = true; };
   }, []);
+
+  // Re-scan bookmarks on demand. In the desktop app this re-reads the browser files;
+  // in the extension it re-pulls from the helper (which re-scans on its side).
+  const refresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      const d = await fetchBookmarks({ refresh: true });
+      setFolders(d.folders);
+      setData(d);
+      setBookmarks(d.bookmarks);
+      setLinkCheck({ checking: false, checked: false, lastChecked: null });
+      flash(`Synced ${d.bookmarks.length} bookmarks`, "⟳");
+    } catch (err) {
+      flash(`Sync failed: ${err.message}`, "⚠");
+    } finally {
+      setRefreshing(false);
+    }
+  }, [flash]);
 
   const runCheck = useCallback(async (ids) => {
     setLinkCheck((s) => ({ ...s, checking: true }));
@@ -70,6 +89,7 @@ export function useTrove() {
   return {
     data, bookmarks, setBookmarks, loadError,
     toast, flash,
+    refreshing, refresh,
     linkCheck, runCheck,
     onOpen, onRemove, onMerge,
   };

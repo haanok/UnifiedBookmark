@@ -107,7 +107,7 @@ function brandName(domain) {
 // CondensedView — the Glance-style single-screen dashboard. Services are tucked into
 // a hover menu (top-left); the full dashboard opens from a button in the opposite corner.
 export default function CondensedView({ trove, onShowFull }) {
-  const { data, bookmarks, onOpen } = trove;
+  const { data, bookmarks, onOpen, refresh, refreshing } = trove;
   const [query, setQuery] = useState("");
   const inputRef = useRef(null);
 
@@ -203,11 +203,17 @@ export default function CondensedView({ trove, onShowFull }) {
         </div>
       </div>
 
-      {/* full dashboard button — opposite corner (top-right) */}
-      <button className="glance-menu glance-full-btn" onClick={onShowFull} title="Open full dashboard">
-        <span className="glance-full-ico">☰</span>
-        <span className="glance-full-label">Full list</span>
-      </button>
+      {/* top-right actions: sync (re-scan) + open the full dashboard */}
+      <div className="glance-actions">
+        <button className="glance-pill" onClick={refresh} disabled={refreshing} title="Re-scan bookmarks">
+          <span className={`glance-pill-ico ${refreshing ? "spin" : ""}`}>⟳</span>
+          <span className="glance-pill-label">{refreshing ? "Syncing…" : "Sync"}</span>
+        </button>
+        <button className="glance-pill" onClick={onShowFull} title="Open full dashboard">
+          <span className="glance-pill-ico">☰</span>
+          <span className="glance-pill-label">Full list</span>
+        </button>
+      </div>
 
       <div className="wrap">
         <section>

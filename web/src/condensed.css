@@ -207,18 +207,20 @@
 .glance .svc-flyout .services { grid-template-columns: 1fr; padding: 0; }
 .glance .svc-flyout .svc:nth-child(2n) { box-shadow: none; }
 
-/* full dashboard button (top-right, opposite corner) */
-.glance .glance-full-btn {
-  right: 18px; display: flex; align-items: center; gap: 8px;
+/* top-right actions (sync + full dashboard), opposite corner from the services menu */
+.glance .glance-actions { position: fixed; top: 18px; right: 18px; z-index: 40; display: flex; gap: 8px; }
+.glance .glance-pill {
+  display: flex; align-items: center; gap: 8px;
   height: 40px; padding: 0 14px; border-radius: 0;
   border: 1px solid var(--panel-bd); background: var(--panel); color: var(--gold-dim);
   font-family: inherit; font-size: 12.5px; letter-spacing: 0.02em;
   transition: border-color .15s, color .15s, background .15s;
 }
-.glance .glance-full-btn:hover {
-  border-color: rgba(216,199,156,0.32); color: var(--gold); background: var(--hover);
-}
-.glance .glance-full-ico { font-size: 15px; line-height: 1; }
+.glance .glance-pill:hover { border-color: rgba(216,199,156,0.32); color: var(--gold); background: var(--hover); }
+.glance .glance-pill[disabled] { opacity: .6; cursor: default; }
+.glance .glance-pill-ico { font-size: 15px; line-height: 1; display: inline-block; }
+.glance .glance-pill-ico.spin { animation: glance-spin .8s linear infinite; }
+@keyframes glance-spin { to { transform: rotate(360deg); } }
 
 /* ---------- custom services (your own IP / DNS), in the services flyout ---------- */
 .glance .custom-svc {
@@ -282,5 +284,5 @@
 @media (max-width: 720px) {
   .glance .services, .glance .bookmarks { grid-template-columns: 1fr; }
   .glance .svc:nth-child(2n) { box-shadow: none; }
-  .glance .glance-full-label { display: none; }
+  .glance .glance-pill-label { display: none; }
 }

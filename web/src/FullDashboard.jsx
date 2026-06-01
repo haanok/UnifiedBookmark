@@ -11,7 +11,7 @@ import { rootDomain } from "./lib/format.js";
 // FullDashboard — the detailed grouped/grid/list dashboard. Shared data and actions
 // come from useTrove (via props); UI filter/sort/layout state stays local here.
 export default function FullDashboard({ trove, onExit }) {
-  const { data, bookmarks, linkCheck, runCheck, onOpen, onRemove, onMerge } = trove;
+  const { data, bookmarks, linkCheck, runCheck, onOpen, onRemove, onMerge, refresh, refreshing } = trove;
 
   const [view, setView] = useState("all"); // all | recent | duplicates | broken
   const [source, setSource] = useState(null);
@@ -160,8 +160,13 @@ export default function FullDashboard({ trove, onExit }) {
           note="Read-only alpha — merge & hide affect this view only, not your real bookmark files."
         />
         <div className="content">
-          {/* Back to the condensed glance view */}
-          <button className="back-to-glance" onClick={onExit} title="Back to glance">‹ Glance</button>
+          {/* Back to the condensed glance view + on-demand re-scan */}
+          <div className="dash-actions">
+            <button className="back-to-glance" onClick={onExit} title="Back to glance">‹ Glance</button>
+            <button className="back-to-glance" onClick={refresh} disabled={refreshing} title="Re-scan bookmarks">
+              {refreshing ? "Syncing…" : "⟳ Sync"}
+            </button>
+          </div>
           {permissionNotices.map((n, i) => (
             <div className="notice-bar permission" key={`p${i}`}>
               <span className="notice-bar-ico">🔒</span>
