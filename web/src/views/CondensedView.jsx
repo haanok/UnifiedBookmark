@@ -107,9 +107,27 @@ function brandName(domain) {
 // CondensedView — the Glance-style single-screen dashboard. Services are tucked into
 // a hover menu (top-left); the full dashboard opens from a button in the opposite corner.
 export default function CondensedView({ trove, onShowFull }) {
-  const { data, bookmarks, onOpen, refresh, refreshing } = trove;
+  const { data, bookmarks, refresh, refreshing } = trove;
   const [query, setQuery] = useState("");
   const inputRef = useRef(null);
+
+  // The search bar is a web search (not a bookmark filter): Enter searches the web,
+  // or navigates straight to a typed URL/host. Opens in a new tab (the desktop app
+  // routes window.open to the system browser).
+  const onSearch = (e) => {
+    e.preventDefault();
+    const q = query.trim();
+    if (!q) return;
+    const isUrl = /^https?:\/\//i.test(q);
+    const looksLikeHost = !q.includes(" ") && /^[\w-]+(\.[\w-]+)+(:\d+)?(\/.*)?$/.test(q);
+    const target = isUrl
+      ? q
+      : looksLikeHost
+      ? `https://${q}`
+      : `https://www.google.com/search?q=${encodeURIComponent(q)}`;
+    window.open(target, "_blank", "noopener");
+    setQuery("");
+  };
 
   // Top folders → columns of top deduped links (by visits), mirroring the prototype.
   const columns = useMemo(() => {
@@ -130,22 +148,6 @@ export default function CondensedView({ trove, onShowFull }) {
       return { name: f.name, links };
     });
   }, [data.folders, bookmarks]);
-
-  const filteredColumns = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return columns;
-    return columns
-      .map((col) => ({
-        ...col,
-        links: col.links.filter(
-          (l) =>
-            l.name.toLowerCase().includes(q) ||
-            l.domain.toLowerCase().includes(q) ||
-            col.name.toLowerCase().includes(q)
-        ),
-      }))
-      .filter((col) => col.links.length);
-  }, [columns, query]);
 
   // Glance-style "s" to focus search, Esc to clear.
   useEffect(() => {
@@ -218,38 +220,31 @@ export default function CondensedView({ trove, onShowFull }) {
       <div className="wrap">
         <section>
           <div className="sec-label">SEARCH</div>
-          <div className="search">
+          <form className="search" onSubmit={onSearch}>
             <span className="search-ico">⌕</span>
             <input
               ref={inputRef}
               className="search-input"
-              placeholder="Type here to search…"
+              placeholder="Search the web…"
               autoComplete="off"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
             <span className="kbd">s</span>
-          </div>
+          </form>
         </section>
 
         <section>
           <div className="sec-label">BOOKMARKS</div>
           <div className="panel">
-            {filteredColumns.length ? (
+            {columns.length ? (
               <div className="bookmarks">
-                {filteredColumns.map((col) => (
+                {columns.map((col) => (
                   <div className="bm-col" key={col.name}>
                     <div className="bm-head">{col.name}</div>
                     <div className="bm-links">
                       {col.links.map((l) => (
-                        <a
-                          className="bm-link"
-                          key={l.id}
-                          href={l.url}
-                          target="_blank"
-                          rel="noopener"
-                          onClick={() => onOpen(l.raw)}
-                        >
+                        <a className="bm-link" key={l.id} href={l.url} target="_blank" rel="noopener">
                           {l.name}
                           <span className="bm-arrow">↗</span>
                         </a>
@@ -260,7 +255,7 @@ export default function CondensedView({ trove, onShowFull }) {
               </div>
             ) : (
               <div className="bookmarks">
-                <div className="bm-empty">No bookmarks match “{query}”.</div>
+                <div className="bm-empty">No bookmarks yet.</div>
               </div>
             )}
           </div>
