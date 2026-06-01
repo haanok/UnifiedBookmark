@@ -2,13 +2,19 @@
   "name": "trove-unified-bookmarks",
   "version": "0.1.0-alpha",
   "private": true,
-  "description": "Trove — a unified cross-browser bookmark dashboard (local backend + web UI)",
+  "description": "Trove — a unified cross-browser bookmark dashboard (desktop app + web/dev mode)",
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "concurrently -n server,web -c blue,magenta \"npm:dev:server\" \"npm:dev:web\"",
     "dev:server": "node server/index.js",
     "dev:web": "npm --prefix web run dev",
     "build": "npm --prefix web run build",
+    "app:dev": "concurrently -k -n vite,app -c magenta,cyan \"npm:dev:web\" \"npm:electron:dev\"",
+    "electron:dev": "env -u ELECTRON_RUN_AS_NODE VITE_DEV=1 electron .",
+    "app": "npm run build && env -u ELECTRON_RUN_AS_NODE electron .",
+    "dist": "npm run build && electron-builder",
+    "ext:build": "npm run build && node scripts/build-extension.mjs",
     "install:all": "npm install && npm --prefix web install",
     "start": "node server/index.js"
   },
@@ -16,11 +22,33 @@
     "node": ">=18"
   },
   "dependencies": {
-    "bplist-parser": "^0.3.2",
-    "cors": "^2.8.5",
-    "express": "^4.21.2"
+    "bplist-parser": "^0.3.2"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "cors": "^2.8.5",
+    "electron": "^42.3.0",
+    "electron-builder": "^26.8.1",
+    "express": "^4.21.2"
+  },
+  "build": {
+    "appId": "com.trove.app",
+    "productName": "Trove",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**",
+      "server/**",
+      "web/dist/**",
+      "package.json"
+    ],
+    "mac": {
+      "target": [
+        "dir",
+        "dmg"
+      ],
+      "category": "public.app-category.utilities"
+    }
   }
 }

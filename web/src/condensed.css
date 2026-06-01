@@ -1,0 +1,286 @@
+/* condensed.css — the "Glance" condensed view, ported from UnifiedBookmark Condensed.html.
+   Everything is scoped under .glance so its palette/typography and its reused class names
+   (.search, .services, .panel, …) never collide with the full dashboard's styles.css.
+
+   Visual language: sharp corners, no glows. Each block carries a small gold "registration
+   tick" in its top-left corner for a blueprint/dev-tool character while staying minimal. */
+
+.glance {
+  --bg:        #0a0a0c;
+  --panel:     rgba(255,255,255,0.014);
+  --panel-bd:  rgba(255,255,255,0.08);
+  --hover:     rgba(255,255,255,0.03);
+  --text:      #e6e6e6;
+  --muted:     #6c6c72;
+  --faint:     #54545a;
+  --gold:      #d8c79c;
+  --gold-dim:  #b6a888;
+  --gold-fill: #cdb87f;
+  --cream:     #aba493;
+  --ok:        #9bbf8f;
+
+  background: var(--bg);
+  color: var(--text);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.glance ::selection { background: rgba(216,199,156,0.22); }
+
+.glance .wrap {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 30px;
+}
+
+/* ---------- section label ---------- */
+.glance .sec-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  font-weight: 500;
+  margin: 0 0 12px 2px;
+}
+/* sharp square bullet — character marker */
+.glance .sec-label::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: var(--gold-dim);
+  flex-shrink: 0;
+}
+
+/* ---------- block: sharp corners + corner registration tick ---------- */
+.glance .panel,
+.glance .search {
+  position: relative;
+  border-radius: 0;
+}
+.glance .panel::before,
+.glance .search::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 18px;
+  height: 2px;
+  background: var(--gold-dim);
+}
+
+/* ---------- search ---------- */
+.glance .search {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border: 1px solid var(--panel-bd);
+  background: var(--panel);
+  padding: 15px 14px 15px 18px;
+  transition: border-color .15s;
+}
+.glance .search:focus-within { border-color: rgba(216,199,156,0.32); }
+.glance .search-ico { color: var(--faint); font-size: 17px; line-height: 1; }
+.glance .search-input {
+  flex: 1; background: none; border: none; outline: none;
+  color: var(--text); font-family: inherit; font-size: 14px; letter-spacing: -0.01em;
+  width: auto; padding: 0; border-radius: 0;
+}
+.glance .search-input::placeholder { color: var(--faint); }
+.glance .search-input:focus { box-shadow: none; }
+.glance .kbd {
+  border: 1px solid rgba(255,255,255,0.11); border-radius: 0;
+  padding: 3px 9px; font-size: 12px; color: var(--muted); line-height: 1;
+}
+
+/* ---------- panel ---------- */
+.glance .panel {
+  border: 1px solid var(--panel-bd);
+  background: var(--panel);
+}
+
+/* ---------- services ---------- */
+.glance .services {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 7px;
+}
+.glance .svc {
+  display: flex; align-items: center; gap: 13px;
+  padding: 13px 15px; border-radius: 0; position: relative;
+  transition: background .12s;
+}
+.glance .svc:hover { background: var(--hover); }
+.glance .svc:nth-child(2n) { box-shadow: inset 1px 0 0 rgba(255,255,255,0.05); }
+.glance .svc-tile {
+  width: 38px; height: 38px; min-width: 38px; border-radius: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid var(--bc);
+  color: var(--bc); font-size: 17px; font-weight: 700;
+}
+.glance .svc-body { flex: 1; min-width: 0; }
+.glance .svc-name { font-size: 14px; font-weight: 500; color: var(--text); letter-spacing: -0.01em; }
+.glance .svc-status { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.glance .svc-status .ok { color: var(--ok); }
+.glance .svc-status .off { color: var(--faint); }
+.glance .svc-check {
+  width: 18px; height: 18px; min-width: 18px; border-radius: 0;
+  background: var(--gold-fill); color: #2a2410;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; margin-left: auto;
+}
+
+/* ---------- bookmarks ---------- */
+.glance .bookmarks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px 26px;
+  padding: 24px 26px;
+}
+.glance .bm-col { min-width: 0; }
+.glance .bm-head {
+  font-size: 14px; font-weight: 600; color: var(--gold);
+  margin-bottom: 14px; letter-spacing: -0.01em;
+  padding-left: 9px; border-left: 2px solid var(--gold-dim);
+}
+.glance .bm-links { display: flex; flex-direction: column; gap: 11px; padding-left: 9px; }
+.glance .bm-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--cream); font-size: 13px; text-decoration: none;
+  width: fit-content; transition: color .12s; letter-spacing: -0.01em;
+}
+.glance .bm-link:hover { color: var(--gold); }
+.glance .bm-arrow { color: var(--faint); font-size: 11px; transition: color .12s, transform .12s; }
+.glance .bm-link:hover .bm-arrow { color: var(--gold-dim); transform: translate(1px,-1px); }
+.glance .bm-empty { color: var(--faint); font-size: 12.5px; }
+
+/* ---------- footer ---------- */
+.glance .foot {
+  text-align: center; color: var(--faint); font-size: 13px;
+  padding: 28px 0 30px; letter-spacing: 0.02em;
+}
+.glance .foot b { color: var(--muted); font-weight: 500; }
+
+/* ---------- corner controls ---------- */
+.glance .glance-menu { position: fixed; top: 18px; z-index: 40; }
+
+/* services trigger (top-left) + hover flyout */
+.glance .svc-menu { left: 18px; outline: none; }
+.glance .glance-icon {
+  width: 40px; height: 40px; border-radius: 0;
+  border: 1px solid var(--panel-bd); background: var(--panel); color: var(--gold-dim);
+  font-size: 17px; display: flex; align-items: center; justify-content: center;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.glance .svc-menu:hover .glance-icon,
+.glance .svc-menu:focus-within .glance-icon {
+  border-color: rgba(216,199,156,0.32); color: var(--gold); background: var(--hover);
+}
+.glance .svc-flyout {
+  position: absolute; top: calc(100% + 9px); left: 0;
+  width: 460px; max-width: 80vw; max-height: calc(100vh - 60px); overflow-y: auto;
+  padding: 14px 14px 7px;
+  /* opaque popover background so content behind doesn't bleed through */
+  background: #121216;
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  opacity: 0; transform: translateY(-6px); pointer-events: none;
+  transition: opacity .15s, transform .15s;
+  /* flat depth shadow (no colored glow) */
+  box-shadow: 0 10px 26px rgba(0,0,0,.5);
+}
+.glance .svc-menu:hover .svc-flyout,
+.glance .svc-menu:focus-within .svc-flyout {
+  opacity: 1; transform: none; pointer-events: auto;
+}
+.glance .svc-flyout .sec-label { margin-left: 9px; }
+.glance .svc-flyout .services { grid-template-columns: 1fr; padding: 0; }
+.glance .svc-flyout .svc:nth-child(2n) { box-shadow: none; }
+
+/* full dashboard button (top-right, opposite corner) */
+.glance .glance-full-btn {
+  right: 18px; display: flex; align-items: center; gap: 8px;
+  height: 40px; padding: 0 14px; border-radius: 0;
+  border: 1px solid var(--panel-bd); background: var(--panel); color: var(--gold-dim);
+  font-family: inherit; font-size: 12.5px; letter-spacing: 0.02em;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.glance .glance-full-btn:hover {
+  border-color: rgba(216,199,156,0.32); color: var(--gold); background: var(--hover);
+}
+.glance .glance-full-ico { font-size: 15px; line-height: 1; }
+
+/* ---------- custom services (your own IP / DNS), in the services flyout ---------- */
+.glance .custom-svc {
+  margin-top: 6px; padding: 11px 11px 4px; border-top: 1px solid var(--panel-bd);
+  display: flex; flex-direction: column; gap: 7px;
+}
+.glance .custom-svc-label {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 10px; letter-spacing: 0.16em; color: var(--faint); margin-bottom: 2px;
+}
+.glance .custom-svc-label::before { content: ""; width: 5px; height: 5px; background: var(--faint); flex-shrink: 0; }
+.glance .csvc { display: flex; align-items: center; gap: 6px; }
+.glance .csvc-open {
+  flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
+  background: none; border: none; border-left: 2px solid var(--panel-bd);
+  padding: 5px 9px; text-align: left; color: var(--cream); transition: border-color .12s, color .12s, background .12s;
+}
+.glance .csvc-open:hover { color: var(--gold); border-left-color: var(--gold-dim); background: var(--hover); }
+.glance .csvc-name { font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.glance .csvc-host { font-size: 10.5px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.glance .csvc-del {
+  background: none; border: none; color: var(--faint); font-size: 15px; line-height: 1;
+  padding: 2px 7px; flex-shrink: 0; transition: color .12s;
+}
+.glance .csvc-del:hover { color: var(--gold); }
+.glance .csvc-add { display: flex; flex-direction: column; gap: 6px; margin-top: 3px; }
+.glance .csvc-in {
+  background: rgba(255,255,255,0.03); border: 1px solid var(--panel-bd); color: var(--text);
+  font-family: inherit; font-size: 11.5px; padding: 6px 8px; border-radius: 0; width: 100%;
+}
+.glance .csvc-in:focus { outline: none; border-color: rgba(216,199,156,0.32); }
+.glance .csvc-in::placeholder { color: var(--faint); }
+.glance .csvc-btn {
+  background: rgba(255,255,255,0.04); border: 1px solid var(--panel-bd); color: var(--gold-dim);
+  font-family: inherit; font-size: 11.5px; padding: 6px 11px; border-radius: 0;
+  align-self: flex-start; transition: border-color .12s, color .12s;
+}
+.glance .csvc-btn:hover { border-color: rgba(216,199,156,0.32); color: var(--gold); }
+
+/* ---------- extension-helper control (desktop app only), in the services flyout ---------- */
+.glance .helper {
+  margin-top: 6px; padding: 11px 11px 3px; border-top: 1px solid var(--panel-bd);
+  display: flex; flex-direction: column; gap: 9px;
+}
+.glance .helper-row { display: flex; align-items: center; gap: 9px; }
+.glance .helper-dot {
+  width: 7px; height: 7px; border-radius: 0; background: var(--faint); flex-shrink: 0;
+}
+.glance .helper-dot.on { background: var(--ok); }
+.glance .helper-label { flex: 1; font-size: 12px; color: var(--muted); }
+.glance .helper-label .mono { color: var(--cream); }
+.glance .helper-btn {
+  background: rgba(255,255,255,0.04); border: 1px solid var(--panel-bd); color: var(--gold-dim);
+  border-radius: 0; padding: 4px 11px; font-family: inherit; font-size: 11.5px;
+  transition: border-color .12s, color .12s;
+}
+.glance .helper-btn:hover { border-color: rgba(216,199,156,0.32); color: var(--gold); }
+.glance .helper-opt { display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--faint); cursor: pointer; }
+.glance .helper-opt input { accent-color: var(--gold-fill); }
+
+@media (max-width: 720px) {
+  .glance .services, .glance .bookmarks { grid-template-columns: 1fr; }
+  .glance .svc:nth-child(2n) { box-shadow: none; }
+  .glance .glance-full-label { display: none; }
+}

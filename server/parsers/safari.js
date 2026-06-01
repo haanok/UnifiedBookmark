@@ -49,7 +49,7 @@ export function readSafari() {
             browser: "safari",
             level: "permission",
             message:
-              "Safari bookmarks need Full Disk Access. Grant it to your terminal (System Settings → Privacy & Security → Full Disk Access), then restart the server.",
+              "Safari bookmarks need Full Disk Access. Grant it under System Settings → Privacy & Security → Full Disk Access (to Trove, or to your terminal in dev mode), then relaunch.",
           },
         ],
       };
