@@ -18,6 +18,25 @@ mockup, reading your actual browser bookmark stores. It runs three ways:
 > **Alpha / read-only.** Trove reads your bookmark files but never writes to them. "Merge" and
 > "Remove/Hide" actions affect the current view only — your browsers are untouched.
 
+## Screenshots
+
+Styled in the **Phosphor** theme — a retro arcade-terminal look (amber + phosphor-green on
+near-black, solid brand-colored tiles, optional CRT scanlines).
+
+**Condensed "Glance" view** — the default / new-tab page: a web-search bar, your top folders as
+columns, and the toggleable scanlines.
+
+![Trove condensed Glance view](docs/condensed.png)
+
+**Services menu** — hover the top-left icon for your connected browsers (sync status + counts) and
+your own custom IP/DNS services.
+
+![Trove services menu](docs/services-menu.png)
+
+**Full dashboard** — the detailed grouped/grid/list view (duplicates, broken-link triage, search, sort).
+
+![Trove full dashboard](docs/full-dashboard.png)
+
 ## Architecture
 
 ```
@@ -136,14 +155,15 @@ Until then, the services menu shows "needs access" for Safari and the other thre
 
 ## Two views
 
-Trove opens on a **condensed "glance" view** (Glance-style: monospace, near-black, soft-gold) and
-keeps the detailed dashboard one click away:
+Trove opens on a **condensed "glance" view** (Glance-style: monospace, near-black, Phosphor amber +
+green) and keeps the detailed dashboard one click away:
 
-- **Condensed view (default)** — a centered SEARCH box and your top folders as BOOKMARKS columns
-  (top links per folder). Press `s` to focus search, `Esc` to clear.
-  - **Services menu** — hover (or focus) the icon in the **top-left** corner to reveal your
-    connected browsers with sync status and saved counts.
-  - **Full list** — the button in the **top-right** corner opens the full dashboard.
+- **Condensed view (default)** — a **web-search** bar (Enter searches the web, or jumps straight to a
+  typed URL/host; press `s` to focus, `Esc` to clear) and your top folders as BOOKMARKS columns.
+  - **Services menu** — hover (or focus) the icon in the **top-left** corner to reveal your connected
+    browsers (sync status + counts) and to add your own **custom IP/DNS services**.
+  - **Top-right controls** — **Scanlines** (toggle the CRT effect, persisted), **Sync** (re-scan),
+    and **Full list** (open the full dashboard).
 - **Full dashboard** — the detailed grouped/grid/list view below. Use **‹ Glance** (top of the
   content area) to return to the condensed view.
 

@@ -1,17 +1,21 @@
 :root {
-  --bg:          oklch(0.165 0.008 265);
-  --surface:     oklch(0.205 0.009 265);
-  --card:        oklch(0.232 0.009 265);
-  --card-hover:  oklch(0.268 0.010 265);
-  --border:      oklch(0.305 0.010 265);
-  --border-soft: oklch(0.265 0.009 265);
-  --text:        oklch(0.955 0.004 265);
-  --text-muted:  oklch(0.715 0.012 265);
-  --text-faint:  oklch(0.560 0.012 265);
-  --accent:      #7C7CF0;
-  --card-radius: 14px;
-  --danger:      oklch(0.66 0.18 22);
-  --warn:        oklch(0.78 0.15 75);
+  /* Phosphor theme — retro arcade terminal. Same variable names as before so every
+     rule (incl. color-mix usages) keeps working; only the values change. Type system
+     is kept (Plex Sans for UI, Plex Mono for data) so dense layouts stay readable. */
+  --bg:          #080a09;
+  --surface:     #0c120e;
+  --card:        #0d140f;
+  --card-hover:  #121b15;
+  --border:      rgba(120,255,180,0.20);
+  --border-soft: rgba(120,255,180,0.10);
+  --text:        #e9fff0;
+  --text-muted:  #8fb3a0;
+  --text-faint:  #5f8270;
+  --accent:      #ffb43f;   /* amber primary */
+  --ok:          #5bf08a;   /* phosphor green */
+  --card-radius: 0px;
+  --danger:      #ff5d52;
+  --warn:        #f5c451;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
@@ -25,7 +29,7 @@ body {
 .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
 button { font-family: inherit; cursor: pointer; }
 ::-webkit-scrollbar { width: 11px; height: 11px; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 8px; border: 3px solid var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 0; border: 3px solid var(--bg); }
 ::-webkit-scrollbar-thumb:hover { background: oklch(0.38 0.01 265); }
 
 /* ---------- shell ---------- */
@@ -55,7 +59,7 @@ button { font-family: inherit; cursor: pointer; }
 .side-item {
   width: 100%; display: flex; align-items: center; gap: 10px;
   background: none; border: none; color: var(--text-muted);
-  padding: 7px 10px; border-radius: 8px; font-size: 13.5px; text-align: left;
+  padding: 7px 10px; border-radius: 0; font-size: 13.5px; text-align: left;
   transition: background .12s, color .12s;
 }
 .side-item:hover { background: oklch(0.25 0.01 265); color: var(--text); }
@@ -65,16 +69,16 @@ button { font-family: inherit; cursor: pointer; }
 .side-text { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .side-count {
   font-size: 11px; color: var(--text-faint); font-family: "IBM Plex Mono", monospace;
-  background: oklch(0.27 0.008 265); padding: 1px 7px; border-radius: 20px; min-width: 22px; text-align: center;
+  background: oklch(0.27 0.008 265); padding: 1px 7px; border-radius: 0; min-width: 22px; text-align: center;
 }
 .side-count.warn { background: color-mix(in oklch, var(--warn), transparent 78%); color: var(--warn); }
 .side-count.danger { background: color-mix(in oklch, var(--danger), transparent 76%); color: oklch(0.8 0.15 22); }
-.side-swatch { width: 9px; height: 9px; border-radius: 50%; box-shadow: 0 0 7px color-mix(in oklch, currentColor, transparent 60%); }
-.side-swatch.sq { border-radius: 3px; }
+.side-swatch { width: 9px; height: 9px; border-radius: 0; box-shadow: 0 0 7px color-mix(in oklch, currentColor, transparent 60%); }
+.side-swatch.sq { border-radius: 0; }
 
 .side-foot { margin-top: auto; padding: 14px 10px 16px; border-top: 1px solid var(--border-soft); }
 .sync-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
-.sync-dot { width: 7px; height: 7px; border-radius: 50%; background: oklch(0.72 0.16 150); box-shadow: 0 0 8px oklch(0.72 0.16 150 / .7); }
+.sync-dot { width: 7px; height: 7px; border-radius: 0; background: var(--ok); box-shadow: 0 0 8px color-mix(in oklch, var(--ok), transparent 30%); }
 .sync-sub { font-size: 11px; color: var(--text-faint); margin-top: 4px; }
 
 /* ---------- main ---------- */
@@ -94,7 +98,7 @@ button { font-family: inherit; cursor: pointer; }
 .search-ico { position: absolute; left: 11px; color: var(--text-faint); font-size: 15px; pointer-events: none; }
 .search-input {
   width: 288px; background: var(--surface); border: 1px solid var(--border);
-  color: var(--text); border-radius: 9px; padding: 8px 30px 8px 32px; font-size: 13px;
+  color: var(--text); border-radius: 0; padding: 8px 30px 8px 32px; font-size: 13px;
   transition: border-color .12s, box-shadow .12s;
 }
 .search-input::placeholder { color: var(--text-faint); }
@@ -105,13 +109,13 @@ button { font-family: inherit; cursor: pointer; }
 .select-wrap { position: relative; }
 .select {
   appearance: none; background: var(--surface); border: 1px solid var(--border); color: var(--text);
-  border-radius: 9px; padding: 8px 30px 8px 12px; font-size: 13px;
+  border-radius: 0; padding: 8px 30px 8px 12px; font-size: 13px;
 }
 .select-wrap::after { content: "⌄"; position: absolute; right: 11px; top: 4px; color: var(--text-faint); pointer-events: none; }
 .select:focus { outline: none; border-color: var(--accent); }
 
-.segmented { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 2px; gap: 2px; }
-.seg { background: none; border: none; color: var(--text-faint); padding: 6px 11px; border-radius: 7px; font-size: 14px; transition: background .12s, color .12s; }
+.segmented { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: 0; padding: 2px; gap: 2px; }
+.seg { background: none; border: none; color: var(--text-faint); padding: 6px 11px; border-radius: 0; font-size: 14px; transition: background .12s, color .12s; }
 .seg:hover { color: var(--text); }
 .seg.active { background: color-mix(in oklch, var(--accent), transparent 80%); color: var(--text); }
 
@@ -120,9 +124,9 @@ button { font-family: inherit; cursor: pointer; }
 /* ---------- groups ---------- */
 .group { margin-bottom: 30px; }
 .group-head { display: flex; align-items: center; gap: 10px; margin-bottom: 13px; }
-.group-bar { width: 4px; height: 16px; border-radius: 3px; background: var(--gc); box-shadow: 0 0 9px color-mix(in oklch, var(--gc), transparent 45%); }
+.group-bar { width: 4px; height: 16px; border-radius: 0; background: var(--gc); box-shadow: 0 0 9px color-mix(in oklch, var(--gc), transparent 45%); }
 .group-name { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
-.group-count { font-size: 11.5px; color: var(--text-faint); background: var(--surface); padding: 2px 9px; border-radius: 20px; }
+.group-count { font-size: 11.5px; color: var(--text-faint); background: var(--surface); padding: 2px 9px; border-radius: 0; }
 
 /* ---------- grid + cards ---------- */
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(266px, 1fr)); gap: 14px; }
@@ -141,7 +145,7 @@ button { font-family: inherit; cursor: pointer; }
 
 .card-top { display: flex; align-items: flex-start; gap: 11px; }
 .favicon {
-  border-radius: 9px; display: flex; align-items: center; justify-content: center;
+  border-radius: 0; display: flex; align-items: center; justify-content: center;
   font-weight: 600; color: #fff; flex-shrink: 0;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), 0 2px 6px rgba(0,0,0,.25);
 }
@@ -155,22 +159,22 @@ button { font-family: inherit; cursor: pointer; }
 .card-meta { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
 .card-date { margin-left: auto; font-size: 11px; color: var(--text-faint); font-family: "IBM Plex Mono", monospace; }
 
-.browser-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 7px color-mix(in oklch, currentColor, transparent 50%); margin-top: 3px; }
+.browser-dot { width: 9px; height: 9px; border-radius: 0; flex-shrink: 0; box-shadow: 0 0 7px color-mix(in oklch, currentColor, transparent 50%); margin-top: 3px; }
 .browser-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); font-weight: 500; white-space: nowrap; }
-.browser-pill-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--bc); box-shadow: 0 0 6px color-mix(in oklch, var(--bc), transparent 50%); }
+.browser-pill-dot { width: 7px; height: 7px; border-radius: 0; background: var(--bc); box-shadow: 0 0 6px color-mix(in oklch, var(--bc), transparent 50%); }
 
 .folder-chip {
   display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 500;
   color: var(--text-muted); background: color-mix(in oklch, var(--fc), transparent 86%);
-  padding: 2px 8px; border-radius: 20px;
+  padding: 2px 8px; border-radius: 0;
 }
 .folder-chip.sm { font-size: 10.5px; padding: 1px 7px; }
-.folder-chip-dot { width: 6px; height: 6px; border-radius: 2px; background: var(--fc); }
+.folder-chip-dot { width: 6px; height: 6px; border-radius: 0; background: var(--fc); }
 
-.tag { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 5px; letter-spacing: 0.01em; text-transform: lowercase; }
+.tag { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 0; letter-spacing: 0.01em; text-transform: lowercase; }
 .tag-dupe { background: color-mix(in oklch, var(--warn), transparent 80%); color: var(--warn); }
 .tag-broken { background: color-mix(in oklch, var(--danger), transparent 80%); color: oklch(0.82 0.14 22); font-family: "IBM Plex Mono", monospace; text-transform: none; }
-.tag-keep { background: color-mix(in oklch, oklch(0.72 0.16 150), transparent 78%); color: oklch(0.82 0.16 150); }
+.tag-keep { background: color-mix(in oklch, var(--ok), transparent 78%); color: var(--ok); }
 
 .card-actions {
   position: absolute; top: 11px; right: 11px; display: flex; gap: 5px;
@@ -178,7 +182,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 .card:hover .card-actions { opacity: 1; transform: none; }
 .icon-btn {
-  width: 26px; height: 26px; border-radius: 7px; border: 1px solid var(--border);
+  width: 26px; height: 26px; border-radius: 0; border: 1px solid var(--border);
   background: color-mix(in oklch, var(--card), black 14%); color: var(--text-muted);
   font-size: 12px; display: flex; align-items: center; justify-content: center; transition: all .12s;
 }
@@ -189,7 +193,7 @@ button { font-family: inherit; cursor: pointer; }
 .rows { display: flex; flex-direction: column; gap: 2px; }
 .row {
   position: relative; display: flex; align-items: center; gap: 13px;
-  padding: 9px 12px; border-radius: 9px; cursor: pointer; transition: background .1s;
+  padding: 9px 12px; border-radius: 0; cursor: pointer; transition: background .1s;
   border: 1px solid transparent;
 }
 .row:hover { background: var(--card); border-color: var(--border-soft); }
@@ -207,7 +211,7 @@ button { font-family: inherit; cursor: pointer; }
 /* ---------- duplicates ---------- */
 .dupe-list, .broken-list { max-width: 940px; display: flex; flex-direction: column; gap: 12px; }
 .dupe-banner, .broken-banner {
-  display: flex; align-items: center; gap: 12px; padding: 13px 16px; border-radius: 11px;
+  display: flex; align-items: center; gap: 12px; padding: 13px 16px; border-radius: 0;
   background: color-mix(in oklch, var(--warn), transparent 90%); border: 1px solid color-mix(in oklch, var(--warn), transparent 76%);
   font-size: 13px; color: var(--text);
 }
@@ -217,31 +221,31 @@ button { font-family: inherit; cursor: pointer; }
 .broken-banner-ico { color: oklch(0.78 0.16 22); }
 .dupe-banner > div, .broken-banner > div { flex: 1; }
 
-.dupe-group { background: var(--card); border: 1px solid var(--border-soft); border-radius: 12px; padding: 14px 16px; }
+.dupe-group { background: var(--card); border: 1px solid var(--border-soft); border-radius: 0; padding: 14px 16px; }
 .dupe-group-head { display: flex; align-items: center; gap: 13px; }
 .dupe-group-info { flex: 1; min-width: 0; }
 .dupe-group-title { font-size: 14px; font-weight: 600; }
 .dupe-group-url { font-size: 11.5px; color: var(--text-faint); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.dupe-group-count { font-size: 11.5px; color: var(--warn); font-family: "IBM Plex Mono", monospace; background: color-mix(in oklch, var(--warn), transparent 84%); padding: 3px 10px; border-radius: 20px; }
+.dupe-group-count { font-size: 11.5px; color: var(--warn); font-family: "IBM Plex Mono", monospace; background: color-mix(in oklch, var(--warn), transparent 84%); padding: 3px 10px; border-radius: 0; }
 .btn-merge {
-  background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 8px 14px;
+  background: var(--accent); color: #fff; border: none; border-radius: 0; padding: 8px 14px;
   font-size: 12.5px; font-weight: 600; white-space: nowrap; transition: filter .12s, transform .12s;
 }
 .btn-merge:hover { filter: brightness(1.12); transform: translateY(-1px); }
 .dupe-copies { display: flex; flex-direction: column; gap: 6px; margin-top: 13px; padding-top: 13px; border-top: 1px solid var(--border-soft); }
-.dupe-copy { display: flex; align-items: center; gap: 12px; padding: 6px 8px; border-radius: 7px; cursor: pointer; }
+.dupe-copy { display: flex; align-items: center; gap: 12px; padding: 6px 8px; border-radius: 0; cursor: pointer; }
 .dupe-copy:hover { background: var(--card-hover); }
 .dupe-copy-date { font-size: 11px; color: var(--text-faint); margin-left: auto; }
 
 /* ---------- broken ---------- */
-.broken-row { display: flex; align-items: center; gap: 14px; background: var(--card); border: 1px solid var(--border-soft); border-radius: 11px; padding: 12px 16px; }
+.broken-row { display: flex; align-items: center; gap: 14px; background: var(--card); border: 1px solid var(--border-soft); border-radius: 0; padding: 12px 16px; }
 .broken-main { flex: 1; min-width: 0; }
 .broken-title { font-size: 13.5px; font-weight: 600; cursor: pointer; }
 .broken-title:hover { color: var(--accent); }
 .broken-url { font-size: 11.5px; color: var(--text-faint); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.status-code { font-size: 11.5px; font-family: "IBM Plex Mono", monospace; color: oklch(0.82 0.14 22); background: color-mix(in oklch, var(--danger), transparent 84%); padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+.status-code { font-size: 11.5px; font-family: "IBM Plex Mono", monospace; color: oklch(0.82 0.14 22); background: color-mix(in oklch, var(--danger), transparent 84%); padding: 3px 10px; border-radius: 0; white-space: nowrap; }
 .broken-actions { display: flex; gap: 6px; }
-.btn-ghost { background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); border-radius: 8px; padding: 7px 12px; font-size: 12.5px; font-weight: 500; transition: all .12s; }
+.btn-ghost { background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); border-radius: 0; padding: 7px 12px; font-size: 12.5px; font-weight: 500; transition: all .12s; }
 .btn-ghost:hover { color: var(--text); border-color: var(--accent); }
 .btn-ghost.sm { padding: 6px 11px; font-size: 12px; }
 .btn-ghost.danger:hover { color: oklch(0.82 0.16 22); border-color: var(--danger); }
@@ -256,7 +260,7 @@ button { font-family: inherit; cursor: pointer; }
 .toast {
   position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%);
   background: oklch(0.28 0.01 265); border: 1px solid var(--border); color: var(--text);
-  padding: 11px 18px; border-radius: 11px; font-size: 13px; font-weight: 500;
+  padding: 11px 18px; border-radius: 0; font-size: 13px; font-weight: 500;
   display: flex; align-items: center; gap: 10px; box-shadow: 0 12px 32px rgba(0,0,0,.45);
   animation: toastIn .26s cubic-bezier(.2,.8,.3,1); z-index: 50;
 }
@@ -274,7 +278,7 @@ button { font-family: inherit; cursor: pointer; }
 /* notices banner (e.g. Safari Full Disk Access) shown at the top of the content area */
 .notice-bar {
   display: flex; align-items: flex-start; gap: 10px; margin-bottom: 18px;
-  padding: 11px 14px; border-radius: 11px; font-size: 12.5px; line-height: 1.45;
+  padding: 11px 14px; border-radius: 0; font-size: 12.5px; line-height: 1.45;
   background: color-mix(in oklch, var(--warn), transparent 90%);
   border: 1px solid color-mix(in oklch, var(--warn), transparent 78%); color: var(--text);
 }
@@ -292,8 +296,16 @@ button { font-family: inherit; cursor: pointer; }
 .back-to-glance {
   display: inline-flex; align-items: center;
   background: var(--surface); border: 1px solid var(--border); color: var(--text-muted);
-  border-radius: 8px; padding: 6px 12px; font-size: 12.5px; font-weight: 500;
+  border-radius: 0; padding: 6px 12px; font-size: 12.5px; font-weight: 500;
   transition: color .12s, border-color .12s;
 }
 .back-to-glance:hover { color: var(--text); border-color: var(--accent); }
 .back-to-glance[disabled] { opacity: .6; cursor: default; }
+
+
+/* ---------- Phosphor character ---------- */
+.brand-name { text-shadow: 0 0 14px color-mix(in oklch, var(--accent), transparent 55%); }
+.page-title { text-shadow: 0 0 16px color-mix(in oklch, var(--accent), transparent 72%); }
+.brand-sub { color: var(--ok); }
+::-webkit-scrollbar-thumb { background: rgba(120,255,180,0.16); }
+::-webkit-scrollbar-thumb:hover { background: rgba(120,255,180,0.28); }

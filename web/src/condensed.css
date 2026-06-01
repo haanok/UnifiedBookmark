@@ -1,23 +1,25 @@
-/* condensed.css — the "Glance" condensed view, ported from UnifiedBookmark Condensed.html.
-   Everything is scoped under .glance so its palette/typography and its reused class names
-   (.search, .services, .panel, …) never collide with the full dashboard's styles.css.
+/* condensed.css — the "Glance" condensed view, PHOSPHOR theme.
+   Everything is scoped under .glance so its palette/typography and reused class
+   names (.search, .services, .panel, …) never collide with styles.css.
 
-   Visual language: sharp corners, no glows. Each block carries a small gold "registration
-   tick" in its top-left corner for a blueprint/dev-tool character while staying minimal. */
+   Visual language: retro arcade terminal. Bright amber primary with a phosphor-green
+   secondary on near-black, solid-filled browser tiles, a blinking caret on section
+   labels, amber section headers with a ▸ prompt, and optional CRT scanlines that the
+   user can toggle (persisted) — applied only when the root carries the `.scan` class. */
 
 .glance {
-  --bg:        #0a0a0c;
-  --panel:     rgba(255,255,255,0.014);
-  --panel-bd:  rgba(255,255,255,0.08);
-  --hover:     rgba(255,255,255,0.03);
-  --text:      #e6e6e6;
-  --muted:     #6c6c72;
-  --faint:     #54545a;
-  --gold:      #d8c79c;
-  --gold-dim:  #b6a888;
-  --gold-fill: #cdb87f;
-  --cream:     #aba493;
-  --ok:        #9bbf8f;
+  --bg:        #080a09;
+  --panel:     rgba(120,255,180,0.018);
+  --panel-bd:  rgba(120,255,180,0.14);
+  --hover:     rgba(120,255,180,0.06);
+  --text:      #e9fff0;
+  --muted:     #6f9683;
+  --faint:     #4e6a5b;
+  --gold:      #ffb43f;   /* primary accent (amber) — headers, links-hover, focus */
+  --gold-dim:  #d8932c;
+  --gold-fill: #5bf08a;   /* check chips / switch knob (phosphor green) */
+  --cream:     #7be0a8;   /* bookmark links */
+  --ok:        #5bf08a;
 
   background: var(--bg);
   color: var(--text);
@@ -27,8 +29,19 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
 }
-.glance ::selection { background: rgba(216,199,156,0.22); }
+.glance ::selection { background: rgba(255,180,63,0.26); }
+
+/* faint CRT scanlines + flicker — only when toggled on (.scan) */
+.glance.scan::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 5;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,0.16) 2px 4px);
+  mix-blend-mode: multiply;
+}
+.glance.scan .wrap { animation: glance-flicker 6s steps(60) infinite; }
+@keyframes glance-flicker { 0%,97%,100% { opacity: 1; } 98% { opacity: .94; } 99% { opacity: .98; } }
 
 .glance .wrap {
   width: 100%;
@@ -40,57 +53,47 @@
   flex-direction: column;
   justify-content: center;
   gap: 30px;
+  position: relative;
+  z-index: 1;
 }
 
-/* ---------- section label ---------- */
+/* ---------- section label: green, with a blinking terminal caret ---------- */
 .glance .sec-label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
   font-size: 11px;
-  letter-spacing: 0.18em;
-  color: var(--muted);
-  font-weight: 500;
-  margin: 0 0 12px 2px;
+  letter-spacing: 0.2em;
+  color: var(--ok);
+  font-weight: 600;
+  margin: 0 0 13px 2px;
 }
-/* sharp square bullet — character marker */
 .glance .sec-label::before {
   content: "";
-  width: 6px;
-  height: 6px;
-  background: var(--gold-dim);
+  width: 9px;
+  height: 15px;
+  background: var(--ok);
   flex-shrink: 0;
+  animation: glance-blink 1.1s steps(1) infinite;
 }
+@keyframes glance-blink { 50% { opacity: 0; } }
 
-/* ---------- block: sharp corners + corner registration tick ---------- */
+/* ---------- blocks: sharp corners ---------- */
 .glance .panel,
-.glance .search {
-  position: relative;
-  border-radius: 0;
-}
-.glance .panel::before,
-.glance .search::before {
-  content: "";
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  width: 18px;
-  height: 2px;
-  background: var(--gold-dim);
-}
+.glance .search { position: relative; border-radius: 0; }
 
 /* ---------- search ---------- */
 .glance .search {
   display: flex;
   align-items: center;
   gap: 13px;
-  border: 1px solid var(--panel-bd);
+  border: 1px solid rgba(120,255,180,0.2);
   background: var(--panel);
   padding: 15px 14px 15px 18px;
-  transition: border-color .15s;
+  transition: border-color .15s, box-shadow .15s;
 }
-.glance .search:focus-within { border-color: rgba(216,199,156,0.32); }
-.glance .search-ico { color: var(--faint); font-size: 17px; line-height: 1; }
+.glance .search:focus-within { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(255,180,63,0.16); }
+.glance .search-ico { color: var(--ok); font-size: 17px; line-height: 1; }
 .glance .search-input {
   flex: 1; background: none; border: none; outline: none;
   color: var(--text); font-family: inherit; font-size: 14px; letter-spacing: -0.01em;
@@ -99,35 +102,29 @@
 .glance .search-input::placeholder { color: var(--faint); }
 .glance .search-input:focus { box-shadow: none; }
 .glance .kbd {
-  border: 1px solid rgba(255,255,255,0.11); border-radius: 0;
-  padding: 3px 9px; font-size: 12px; color: var(--muted); line-height: 1;
+  border: 1px solid rgba(120,255,180,0.3); border-radius: 0;
+  padding: 3px 9px; font-size: 12px; color: var(--ok); line-height: 1;
 }
 
 /* ---------- panel ---------- */
-.glance .panel {
-  border: 1px solid var(--panel-bd);
-  background: var(--panel);
-}
+.glance .panel { border: 1px solid var(--panel-bd); background: var(--panel); }
 
 /* ---------- services ---------- */
-.glance .services {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  padding: 7px;
-}
+.glance .services { display: grid; grid-template-columns: 1fr 1fr; padding: 7px; }
 .glance .svc {
   display: flex; align-items: center; gap: 13px;
   padding: 13px 15px; border-radius: 0; position: relative;
   transition: background .12s;
 }
 .glance .svc:hover { background: var(--hover); }
-.glance .svc:nth-child(2n) { box-shadow: inset 1px 0 0 rgba(255,255,255,0.05); }
+.glance .svc:nth-child(2n) { box-shadow: inset 1px 0 0 rgba(120,255,180,0.1); }
+/* solid phosphor browser tiles (brand color comes in as --bc inline) */
 .glance .svc-tile {
   width: 38px; height: 38px; min-width: 38px; border-radius: 0;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(255,255,255,0.035);
-  border: 1px solid var(--bc);
-  color: var(--bc); font-size: 17px; font-weight: 700;
+  background: var(--bc); border: none; color: #06140d;
+  font-size: 17px; font-weight: 800;
+  box-shadow: 0 0 18px -6px var(--bc);
 }
 .glance .svc-body { flex: 1; min-width: 0; }
 .glance .svc-name { font-size: 14px; font-weight: 500; color: var(--text); letter-spacing: -0.01em; }
@@ -136,40 +133,35 @@
 .glance .svc-status .off { color: var(--faint); }
 .glance .svc-check {
   width: 18px; height: 18px; min-width: 18px; border-radius: 0;
-  background: var(--gold-fill); color: #2a2410;
+  background: var(--gold-fill); color: #06140d;
   display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700; margin-left: auto;
+  font-size: 11px; font-weight: 800; margin-left: auto;
+  box-shadow: 0 0 12px -2px var(--ok);
 }
 
 /* ---------- bookmarks ---------- */
-.glance .bookmarks {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px 26px;
-  padding: 24px 26px;
-}
+.glance .bookmarks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px 26px; padding: 24px 26px; }
 .glance .bm-col { min-width: 0; }
 .glance .bm-head {
-  font-size: 14px; font-weight: 600; color: var(--gold);
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 700; color: var(--gold);
   margin-bottom: 14px; letter-spacing: -0.01em;
-  padding-left: 9px; border-left: 2px solid var(--gold-dim);
+  text-shadow: 0 0 14px rgba(255,180,63,0.4);
 }
-.glance .bm-links { display: flex; flex-direction: column; gap: 11px; padding-left: 9px; }
+.glance .bm-head::before { content: "▸"; color: var(--ok); font-size: 12px; }
+.glance .bm-links { display: flex; flex-direction: column; gap: 11px; }
 .glance .bm-link {
   display: inline-flex; align-items: center; gap: 6px;
   color: var(--cream); font-size: 13px; text-decoration: none;
-  width: fit-content; transition: color .12s; letter-spacing: -0.01em;
+  width: fit-content; transition: color .12s, text-shadow .12s; letter-spacing: -0.01em;
 }
-.glance .bm-link:hover { color: var(--gold); }
+.glance .bm-link:hover { color: var(--gold); text-shadow: 0 0 12px rgba(255,180,63,0.5); }
 .glance .bm-arrow { color: var(--faint); font-size: 11px; transition: color .12s, transform .12s; }
 .glance .bm-link:hover .bm-arrow { color: var(--gold-dim); transform: translate(1px,-1px); }
 .glance .bm-empty { color: var(--faint); font-size: 12.5px; }
 
 /* ---------- footer ---------- */
-.glance .foot {
-  text-align: center; color: var(--faint); font-size: 13px;
-  padding: 28px 0 30px; letter-spacing: 0.02em;
-}
+.glance .foot { text-align: center; color: var(--faint); font-size: 13px; padding: 28px 0 30px; letter-spacing: 0.02em; position: relative; z-index: 1; }
 .glance .foot b { color: var(--muted); font-weight: 500; }
 
 /* ---------- corner controls ---------- */
@@ -179,105 +171,87 @@
 .glance .svc-menu { left: 18px; outline: none; }
 .glance .glance-icon {
   width: 40px; height: 40px; border-radius: 0;
-  border: 1px solid var(--panel-bd); background: var(--panel); color: var(--gold-dim);
+  border: 1px solid var(--panel-bd); background: var(--panel); color: var(--ok);
   font-size: 17px; display: flex; align-items: center; justify-content: center;
   transition: border-color .15s, color .15s, background .15s;
 }
 .glance .svc-menu:hover .glance-icon,
-.glance .svc-menu:focus-within .glance-icon {
-  border-color: rgba(216,199,156,0.32); color: var(--gold); background: var(--hover);
-}
+.glance .svc-menu:focus-within .glance-icon { border-color: var(--gold); color: var(--gold); background: var(--hover); }
 .glance .svc-flyout {
   position: absolute; top: calc(100% + 9px); left: 0;
   width: 460px; max-width: 80vw; max-height: calc(100vh - 60px); overflow-y: auto;
   padding: 14px 14px 7px;
-  /* opaque popover background so content behind doesn't bleed through */
-  background: #121216;
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  background: #0c120e;
   opacity: 0; transform: translateY(-6px); pointer-events: none;
   transition: opacity .15s, transform .15s;
-  /* flat depth shadow (no colored glow) */
   box-shadow: 0 10px 26px rgba(0,0,0,.5);
 }
 .glance .svc-menu:hover .svc-flyout,
-.glance .svc-menu:focus-within .svc-flyout {
-  opacity: 1; transform: none; pointer-events: auto;
-}
+.glance .svc-menu:focus-within .svc-flyout { opacity: 1; transform: none; pointer-events: auto; }
 .glance .svc-flyout .sec-label { margin-left: 9px; }
 .glance .svc-flyout .services { grid-template-columns: 1fr; padding: 0; }
 .glance .svc-flyout .svc:nth-child(2n) { box-shadow: none; }
 
-/* top-right actions (sync + full dashboard), opposite corner from the services menu */
+/* top-right actions (scanlines + sync + full dashboard) */
 .glance .glance-actions { position: fixed; top: 18px; right: 18px; z-index: 40; display: flex; gap: 8px; }
 .glance .glance-pill {
   display: flex; align-items: center; gap: 8px;
   height: 40px; padding: 0 14px; border-radius: 0;
-  border: 1px solid var(--panel-bd); background: var(--panel); color: var(--gold-dim);
-  font-family: inherit; font-size: 12.5px; letter-spacing: 0.02em;
+  border: 1px solid var(--panel-bd); background: var(--panel); color: var(--ok);
+  font-family: inherit; font-size: 12.5px; letter-spacing: 0.02em; white-space: nowrap; cursor: pointer;
   transition: border-color .15s, color .15s, background .15s;
 }
-.glance .glance-pill:hover { border-color: rgba(216,199,156,0.32); color: var(--gold); background: var(--hover); }
+.glance .glance-pill:hover { border-color: var(--gold); color: var(--gold); background: var(--hover); }
 .glance .glance-pill[disabled] { opacity: .6; cursor: default; }
 .glance .glance-pill-ico { font-size: 15px; line-height: 1; display: inline-block; }
 .glance .glance-pill-ico.spin { animation: glance-spin .8s linear infinite; }
 @keyframes glance-spin { to { transform: rotate(360deg); } }
 
+/* scanline toggle switch (inside its pill) */
+.glance .glance-switch {
+  width: 26px; height: 14px; border-radius: 0; flex-shrink: 0;
+  border: 1px solid rgba(120,255,180,0.3); background: rgba(120,255,180,0.06);
+  position: relative; transition: border-color .15s, background .15s;
+}
+.glance .glance-switch::after {
+  content: ""; position: absolute; top: 1px; left: 1px; width: 10px; height: 10px;
+  background: var(--faint); transition: transform .15s, background .15s, box-shadow .15s;
+}
+.glance .glance-pill.on .glance-switch { border-color: var(--ok); background: rgba(91,240,138,0.14); }
+.glance .glance-pill.on .glance-switch::after { transform: translateX(12px); background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+
 /* ---------- custom services (your own IP / DNS), in the services flyout ---------- */
-.glance .custom-svc {
-  margin-top: 6px; padding: 11px 11px 4px; border-top: 1px solid var(--panel-bd);
-  display: flex; flex-direction: column; gap: 7px;
-}
-.glance .custom-svc-label {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 10px; letter-spacing: 0.16em; color: var(--faint); margin-bottom: 2px;
-}
+.glance .custom-svc { margin-top: 6px; padding: 11px 11px 4px; border-top: 1px solid var(--panel-bd); display: flex; flex-direction: column; gap: 7px; }
+.glance .custom-svc-label { display: flex; align-items: center; gap: 8px; font-size: 10px; letter-spacing: 0.16em; color: var(--faint); margin-bottom: 2px; }
 .glance .custom-svc-label::before { content: ""; width: 5px; height: 5px; background: var(--faint); flex-shrink: 0; }
 .glance .csvc { display: flex; align-items: center; gap: 6px; }
 .glance .csvc-open {
   flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
   background: none; border: none; border-left: 2px solid var(--panel-bd);
-  padding: 5px 9px; text-align: left; color: var(--cream); transition: border-color .12s, color .12s, background .12s;
+  padding: 5px 9px; text-align: left; color: var(--cream); cursor: pointer;
+  transition: border-color .12s, color .12s, background .12s;
 }
 .glance .csvc-open:hover { color: var(--gold); border-left-color: var(--gold-dim); background: var(--hover); }
 .glance .csvc-name { font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .glance .csvc-host { font-size: 10.5px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-.glance .csvc-del {
-  background: none; border: none; color: var(--faint); font-size: 15px; line-height: 1;
-  padding: 2px 7px; flex-shrink: 0; transition: color .12s;
-}
+.glance .csvc-del { background: none; border: none; color: var(--faint); font-size: 15px; line-height: 1; padding: 2px 7px; flex-shrink: 0; cursor: pointer; transition: color .12s; }
 .glance .csvc-del:hover { color: var(--gold); }
 .glance .csvc-add { display: flex; flex-direction: column; gap: 6px; margin-top: 3px; }
-.glance .csvc-in {
-  background: rgba(255,255,255,0.03); border: 1px solid var(--panel-bd); color: var(--text);
-  font-family: inherit; font-size: 11.5px; padding: 6px 8px; border-radius: 0; width: 100%;
-}
-.glance .csvc-in:focus { outline: none; border-color: rgba(216,199,156,0.32); }
+.glance .csvc-in { background: rgba(120,255,180,0.03); border: 1px solid var(--panel-bd); color: var(--text); font-family: inherit; font-size: 11.5px; padding: 6px 8px; border-radius: 0; width: 100%; }
+.glance .csvc-in:focus { outline: none; border-color: var(--gold); }
 .glance .csvc-in::placeholder { color: var(--faint); }
-.glance .csvc-btn {
-  background: rgba(255,255,255,0.04); border: 1px solid var(--panel-bd); color: var(--gold-dim);
-  font-family: inherit; font-size: 11.5px; padding: 6px 11px; border-radius: 0;
-  align-self: flex-start; transition: border-color .12s, color .12s;
-}
-.glance .csvc-btn:hover { border-color: rgba(216,199,156,0.32); color: var(--gold); }
+.glance .csvc-btn { background: rgba(120,255,180,0.04); border: 1px solid var(--panel-bd); color: var(--ok); font-family: inherit; font-size: 11.5px; padding: 6px 11px; border-radius: 0; align-self: flex-start; cursor: pointer; transition: border-color .12s, color .12s; }
+.glance .csvc-btn:hover { border-color: var(--gold); color: var(--gold); }
 
 /* ---------- extension-helper control (desktop app only), in the services flyout ---------- */
-.glance .helper {
-  margin-top: 6px; padding: 11px 11px 3px; border-top: 1px solid var(--panel-bd);
-  display: flex; flex-direction: column; gap: 9px;
-}
+.glance .helper { margin-top: 6px; padding: 11px 11px 3px; border-top: 1px solid var(--panel-bd); display: flex; flex-direction: column; gap: 9px; }
 .glance .helper-row { display: flex; align-items: center; gap: 9px; }
-.glance .helper-dot {
-  width: 7px; height: 7px; border-radius: 0; background: var(--faint); flex-shrink: 0;
-}
-.glance .helper-dot.on { background: var(--ok); }
+.glance .helper-dot { width: 7px; height: 7px; border-radius: 0; background: var(--faint); flex-shrink: 0; }
+.glance .helper-dot.on { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
 .glance .helper-label { flex: 1; font-size: 12px; color: var(--muted); }
 .glance .helper-label .mono { color: var(--cream); }
-.glance .helper-btn {
-  background: rgba(255,255,255,0.04); border: 1px solid var(--panel-bd); color: var(--gold-dim);
-  border-radius: 0; padding: 4px 11px; font-family: inherit; font-size: 11.5px;
-  transition: border-color .12s, color .12s;
-}
-.glance .helper-btn:hover { border-color: rgba(216,199,156,0.32); color: var(--gold); }
+.glance .helper-btn { background: rgba(120,255,180,0.04); border: 1px solid var(--panel-bd); color: var(--ok); border-radius: 0; padding: 4px 11px; font-family: inherit; font-size: 11.5px; cursor: pointer; transition: border-color .12s, color .12s; }
+.glance .helper-btn:hover { border-color: var(--gold); color: var(--gold); }
 .glance .helper-opt { display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--faint); cursor: pointer; }
 .glance .helper-opt input { accent-color: var(--gold-fill); }
 

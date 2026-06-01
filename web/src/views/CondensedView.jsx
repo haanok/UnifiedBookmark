@@ -111,6 +111,26 @@ export default function CondensedView({ trove, onShowFull }) {
   const [query, setQuery] = useState("");
   const inputRef = useRef(null);
 
+  // Phosphor CRT scanlines — toggleable, persisted, default on.
+  const [scan, setScan] = useState(() => {
+    try {
+      return (localStorage.getItem("trove:scanlines") ?? "1") === "1";
+    } catch {
+      return true;
+    }
+  });
+  const toggleScan = () => {
+    setScan((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem("trove:scanlines", next ? "1" : "0");
+      } catch {
+        /* private mode / quota — non-fatal */
+      }
+      return next;
+    });
+  };
+
   // The search bar is a web search (not a bookmark filter): Enter searches the web,
   // or navigates straight to a typed URL/host. Opens in a new tab (the desktop app
   // routes window.open to the system browser).
@@ -175,7 +195,7 @@ export default function CondensedView({ trove, onShowFull }) {
   };
 
   return (
-    <div className="glance">
+    <div className={`glance${scan ? " scan" : ""}`}>
       {/* hidden services menu — top-left, reveals on hover/focus */}
       <div className="glance-menu svc-menu" tabIndex={0}>
         <button className="glance-icon" aria-label="Services" title="Services">⧉</button>
@@ -205,8 +225,18 @@ export default function CondensedView({ trove, onShowFull }) {
         </div>
       </div>
 
-      {/* top-right actions: sync (re-scan) + open the full dashboard */}
+      {/* top-right actions: scanlines toggle + sync (re-scan) + open the full dashboard */}
       <div className="glance-actions">
+        <button
+          className={`glance-pill${scan ? " on" : ""}`}
+          onClick={toggleScan}
+          title="Toggle CRT scanlines"
+          aria-pressed={scan}
+        >
+          <span className="glance-pill-ico">▤</span>
+          <span className="glance-pill-label">Scanlines</span>
+          <span className="glance-switch" />
+        </button>
         <button className="glance-pill" onClick={refresh} disabled={refreshing} title="Re-scan bookmarks">
           <span className={`glance-pill-ico ${refreshing ? "spin" : ""}`}>⟳</span>
           <span className="glance-pill-label">{refreshing ? "Syncing…" : "Sync"}</span>
