@@ -1,0 +1,26 @@
+{
+  "name": "trove-unified-bookmarks",
+  "version": "0.1.0-alpha",
+  "private": true,
+  "description": "Trove — a unified cross-browser bookmark dashboard (local backend + web UI)",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n server,web -c blue,magenta \"npm:dev:server\" \"npm:dev:web\"",
+    "dev:server": "node server/index.js",
+    "dev:web": "npm --prefix web run dev",
+    "build": "npm --prefix web run build",
+    "install:all": "npm install && npm --prefix web install",
+    "start": "node server/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bplist-parser": "^0.3.2",
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
